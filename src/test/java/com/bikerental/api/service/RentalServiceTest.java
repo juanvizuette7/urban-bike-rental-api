@@ -52,7 +52,7 @@ class RentalServiceTest {
     @Test
     void startRentalWithAvailableBicycleCreatesActiveRentalAndMarksBicycleAsRented() {
         Bicycle bicycle = bicycle("BIC-001", BicycleType.URBANA, BicycleStatus.DISPONIBLE);
-        StartRentalRequestDTO request = new StartRentalRequestDTO("BIC-001", "Juan Perez", 2);
+        StartRentalRequestDTO request = new StartRentalRequestDTO("BIC-001", "Juan Vizuette", 2);
 
         when(bicycleRepository.findByCode("BIC-001")).thenReturn(Optional.of(bicycle));
         when(rentalRepository.save(any(Rental.class))).thenAnswer(invocation -> {
