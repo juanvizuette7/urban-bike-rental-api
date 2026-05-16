@@ -2,7 +2,9 @@
 
 ## Descripción
 
-Urban Bike Rental API es una API REST desarrollada con Spring Boot para gestionar bicicletas urbanas y sus alquileres. Permite registrar bicicletas, consultar disponibilidad, iniciar y finalizar alquileres, consultar historial por bicicleta, calcular costos de uso y aplicar multas por retraso.
+Urban Bike Rental API es una API REST desarrollada con Spring Boot para gestionar bicicletas urbanas y sus alquileres.
+
+Permite registrar bicicletas, consultar disponibilidad, iniciar y finalizar alquileres, consultar historial por bicicleta, calcular costos de uso y aplicar multas por retraso.
 
 ## Tecnologías utilizadas
 
@@ -31,7 +33,9 @@ El proyecto usa una arquitectura por capas:
 
 ## Justificación de arquitectura
 
-Se eligió arquitectura por capas porque cumple el alcance de una API REST sencilla, separa responsabilidades, facilita pruebas unitarias y evita complejidad innecesaria. No se usaron microservicios ni arquitectura hexagonal porque el taller no lo requiere y agregarían sobreingeniería para el problema planteado.
+Se eligió arquitectura por capas porque cumple el alcance de una API REST sencilla, separa responsabilidades, facilita pruebas unitarias y evita complejidad innecesaria.
+
+No se usaron microservicios ni arquitectura hexagonal porque el taller no lo requiere y agregarían sobreingeniería para el problema planteado.
 
 ## Principios aplicados
 
@@ -156,7 +160,9 @@ curl -X POST http://localhost:8080/api/bicycles \
 Crear bicicleta en Windows CMD:
 
 ```cmd
-curl.exe -X POST http://localhost:8080/api/bicycles -H "Content-Type: application/json" -d "{\"code\":\"BIC-006\",\"type\":\"URBANA\",\"status\":\"DISPONIBLE\"}"
+curl.exe -X POST http://localhost:8080/api/bicycles ^
+  -H "Content-Type: application/json" ^
+  -d "{\"code\":\"BIC-006\",\"type\":\"URBANA\",\"status\":\"DISPONIBLE\"}"
 ```
 
 Listar bicicletas:
@@ -188,7 +194,9 @@ curl -X POST http://localhost:8080/api/rentals/start \
 Iniciar alquiler en Windows CMD:
 
 ```cmd
-curl.exe -X POST http://localhost:8080/api/rentals/start -H "Content-Type: application/json" -d "{\"bicycleCode\":\"BIC-001\",\"customerName\":\"Juan Vizuette\",\"estimatedDurationHours\":2}"
+curl.exe -X POST http://localhost:8080/api/rentals/start ^
+  -H "Content-Type: application/json" ^
+  -d "{\"bicycleCode\":\"BIC-001\",\"customerName\":\"Juan Vizuette\",\"estimatedDurationHours\":2}"
 ```
 
 Finalizar alquiler con `returnTime`:
@@ -202,7 +210,9 @@ curl -X PUT http://localhost:8080/api/rentals/1/finish \
 Finalizar alquiler en Windows CMD:
 
 ```cmd
-curl.exe -X PUT http://localhost:8080/api/rentals/1/finish -H "Content-Type: application/json" -d "{\"returnTime\":\"2026-05-16T13:20:00\"}"
+curl.exe -X PUT http://localhost:8080/api/rentals/1/finish ^
+  -H "Content-Type: application/json" ^
+  -d "{\"returnTime\":\"2026-05-16T13:20:00\"}"
 ```
 
 Consultar historial por bicicleta:
@@ -215,47 +225,49 @@ curl http://localhost:8080/api/bicycles/BIC-001/rentals
 
 1. Consultar bicicletas disponibles:
 
-```bash
-curl http://localhost:8080/api/bicycles/available
-```
+   ```bash
+   curl http://localhost:8080/api/bicycles/available
+   ```
 
 2. Iniciar alquiler con `BIC-001`:
 
-```bash
-curl -X POST http://localhost:8080/api/rentals/start \
-  -H "Content-Type: application/json" \
-  -d '{"bicycleCode":"BIC-001","customerName":"Juan Vizuette","estimatedDurationHours":2}'
-```
+   ```bash
+   curl -X POST http://localhost:8080/api/rentals/start \
+     -H "Content-Type: application/json" \
+     -d '{"bicycleCode":"BIC-001","customerName":"Juan Vizuette","estimatedDurationHours":2}'
+   ```
 
 3. Consultar disponibles para verificar que `BIC-001` ya no aparece:
 
-```bash
-curl http://localhost:8080/api/bicycles/available
-```
+   ```bash
+   curl http://localhost:8080/api/bicycles/available
+   ```
 
 4. Finalizar el alquiler:
 
-```bash
-curl -X PUT http://localhost:8080/api/rentals/1/finish \
-  -H "Content-Type: application/json" \
-  -d '{"returnTime":"2026-05-16T13:20:00"}'
-```
+   ```bash
+   curl -X PUT http://localhost:8080/api/rentals/1/finish \
+     -H "Content-Type: application/json" \
+     -d '{"returnTime":"2026-05-16T13:20:00"}'
+   ```
 
 5. Verificar que la bicicleta vuelve a estar disponible:
 
-```bash
-curl http://localhost:8080/api/bicycles/available
-```
+   ```bash
+   curl http://localhost:8080/api/bicycles/available
+   ```
 
 6. Consultar historial por bicicleta:
 
-```bash
-curl http://localhost:8080/api/bicycles/BIC-001/rentals
-```
+   ```bash
+   curl http://localhost:8080/api/bicycles/BIC-001/rentals
+   ```
 
 ## Manejo de errores
 
-La API devuelve errores JSON consistentes con `status`, `message` y `timestamp`. No se exponen entidades internas ni stacktraces.
+La API devuelve errores JSON consistentes con `status`, `message` y `timestamp`.
+
+No se exponen entidades internas ni stacktraces.
 
 Ejemplo:
 
