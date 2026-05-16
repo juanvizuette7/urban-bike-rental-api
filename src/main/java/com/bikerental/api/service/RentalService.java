@@ -1,6 +1,7 @@
 package com.bikerental.api.service;
 
 import com.bikerental.api.dto.FinishRentalRequestDTO;
+import com.bikerental.api.dto.RentalHistoryResponseDTO;
 import com.bikerental.api.dto.RentalResponseDTO;
 import com.bikerental.api.dto.StartRentalRequestDTO;
 import com.bikerental.api.exception.BicycleNotAvailableException;
@@ -114,9 +115,36 @@ public class RentalService {
         return toResponse(findRentalByIdOrThrow(rentalId));
     }
 
+    @Transactional(readOnly = true)
+    public List<RentalHistoryResponseDTO> findHistoryByBicycleCode(String code) {
+        if (!bicycleRepository.existsByCode(code)) {
+            throw new ResourceNotFoundException("No existe una bicicleta con el codigo: " + code);
+        }
+
+        return rentalRepository.findByBicycleCodeOrderByStartTimeDesc(code)
+                .stream()
+                .map(this::toHistoryResponse)
+                .toList();
+    }
+
     private Rental findRentalByIdOrThrow(Long rentalId) {
         return rentalRepository.findById(rentalId)
                 .orElseThrow(() -> new ResourceNotFoundException("No existe un alquiler con el id: " + rentalId));
+    }
+
+    private RentalHistoryResponseDTO toHistoryResponse(Rental rental) {
+        boolean hasPenalty = rental.getPenaltyCost() != null
+                && rental.getPenaltyCost().compareTo(BigDecimal.ZERO) > 0;
+
+        return new RentalHistoryResponseDTO(
+                rental.getId(),
+                rental.getCustomerName(),
+                rental.getStartTime(),
+                rental.getReturnTime(),
+                rental.getRealUsedHours(),
+                rental.getTotalCost(),
+                hasPenalty
+        );
     }
 
     private RentalResponseDTO toResponse(Rental rental) {
