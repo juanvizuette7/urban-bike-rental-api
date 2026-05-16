@@ -2,7 +2,7 @@ package com.bikerental.api.service;
 
 import com.bikerental.api.dto.BicycleRequestDTO;
 import com.bikerental.api.dto.BicycleResponseDTO;
-import com.bikerental.api.exception.DuplicateBicycleCodeException;
+import com.bikerental.api.exception.DuplicateResourceException;
 import com.bikerental.api.exception.ResourceNotFoundException;
 import com.bikerental.api.model.Bicycle;
 import com.bikerental.api.model.BicycleStatus;
@@ -25,7 +25,7 @@ public class BicycleService {
     @Transactional
     public BicycleResponseDTO create(BicycleRequestDTO request) {
         if (bicycleRepository.existsByCode(request.code())) {
-            throw new DuplicateBicycleCodeException(request.code());
+            throw new DuplicateResourceException("Ya existe una bicicleta con el codigo: " + request.code());
         }
 
         Bicycle bicycle = new Bicycle(request.code(), request.type(), request.status());

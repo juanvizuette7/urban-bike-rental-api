@@ -13,6 +13,7 @@ import com.bikerental.api.model.Rental;
 import com.bikerental.api.model.RentalStatus;
 import com.bikerental.api.repository.BicycleRepository;
 import com.bikerental.api.repository.RentalRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -65,7 +66,7 @@ public class RentalService {
         Rental rental = findRentalByIdOrThrow(rentalId);
 
         if (rental.getStatus() == RentalStatus.FINALIZADO) {
-            throw new InvalidRentalException("El alquiler ya fue finalizado");
+            throw new InvalidRentalException("El alquiler ya fue finalizado", HttpStatus.CONFLICT);
         }
 
         LocalDateTime returnTime = request == null || request.returnTime() == null

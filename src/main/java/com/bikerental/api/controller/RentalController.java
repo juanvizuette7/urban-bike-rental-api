@@ -35,7 +35,7 @@ public class RentalController {
 
     @PutMapping("/{id}/finish")
     public RentalResponseDTO finishRental(@PathVariable Long id,
-                                          @RequestBody(required = false) FinishRentalRequestDTO request) {
+                                          @Valid @RequestBody(required = false) FinishRentalRequestDTO request) {
         return rentalService.finishRental(id, request);
     }
 
